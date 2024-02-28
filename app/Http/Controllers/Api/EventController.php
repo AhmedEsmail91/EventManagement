@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -13,6 +14,7 @@ class EventController extends Controller
     public function index()
     {
         //
+        return Event::all();
     }
 
     /**
@@ -26,9 +28,10 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Event $event)
     {
         //
+        return $event;
     }
 
     /**

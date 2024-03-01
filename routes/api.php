@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('events',EventController::class);
 
 Route::apiResource('events.attendees',AttendeeController::class)
-    ->scoped(['attendee'=>'event']) // attendee resources is always part of an event.
+    ->except(['update']) // --> we don't need to edit the attendees so exclude it from the route:list
+    // ->scoped(['attendee'=>'event']) // attendee resources is always part of an event.
 ; 

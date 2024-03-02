@@ -14,6 +14,13 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // make constructor
+    public function __construct()
+    {
+        // authenticate all methods except show and index which are public information.
+        // instead of adding it in the route for each method just make a general auth middleware that will apply to every single instance
+        $this->middleware('auth:sanctum')->except(['index','show']); 
+    }
     private $relations = ['user','attendees','attendees.user'];
     public function index()
     {
@@ -36,8 +43,8 @@ class EventController extends Controller
                 'end_time'=>['required','date','after:start_time']
             ]
         );
-        $event = Event::create([...$valid_request,'user_id'=>1]);
-        return new EventResource($this->loadRelationship($event));
+        $event = Event::create([...$valid_request,'user_id'=>$request->user()->id]);// in requests the data is passing through all the api.
+        return new EventResource($event);
     }
 
     /**

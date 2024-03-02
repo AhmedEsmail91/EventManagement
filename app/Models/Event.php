@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory; // trade is like using methods outside without using inheritance
     protected $fillable = [
         'name',
         'description',

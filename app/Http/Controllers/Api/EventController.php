@@ -7,6 +7,7 @@ use App\Http\Resources\EventResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
@@ -19,7 +20,8 @@ class EventController extends Controller
     {
         // authenticate all methods except show and index which are public information.
         // instead of adding it in the route for each method just make a general auth middleware that will apply to every single instance
-        $this->middleware('auth:sanctum')->except(['index','show']); 
+        // $this->middleware('auth:sanctum')->except(['index','show']); 
+        $this->authorizeResource(Event::class,'event');
     }
     private $relations = ['user','attendees','attendees.user'];
     public function index()
@@ -63,6 +65,12 @@ class EventController extends Controller
      */
     public function update(Request $request,Event $event)
     {
+        // if (Gate::denies('update-event',$event)) {
+        //     abort(403,'You are not authorized to perform this action');
+        // }
+        // or simply write the following
+        $this->authorize('update-event',$event);
+        
         $valid_request=$request->validate(
             [
                 'name'=>['string','max:255'],

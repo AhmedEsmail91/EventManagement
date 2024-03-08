@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,9 @@ class AuthController extends Controller
             return response()->json(['message'=>'Invalid Credentials']);
         }
         $token=$user->createToken('api-token')->plainTextToken;
-        return response()->json(['token'=>$token,'user'=>$user]);
+        
+        
+        return response()->json(['token'=>$token,'user'=>$user,'events'=>Event::all()->where('user_id','=',$user->id)->load('attendees')]);
     }
     public function logout(Request $request){
         $request->user()->tokens()->delete();
